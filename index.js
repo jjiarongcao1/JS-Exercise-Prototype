@@ -39,9 +39,27 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
+
+Person.prototype.eat = function(food) {
+  if(this.stomach.length < 10) {
+    this.stomach.push(food);
+  }
+}
+
+Person.prototype.poop = function() {
+  this.stomach = [];
+}
+
+Person.prototype.toString = function() {
+  return this.name + ', ' + this.age;
+}
+
+console.log(new Person("Marry", 50));
 
 /*
   TASK 2
@@ -57,10 +75,30 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
 
+Car.prototype.fill = function(gallons) {
+  this.tank += gallons;
+}
+
+Car.prototype.drive = function(distance) {
+  let fuel = distance / this.milesPerGallon;
+  if(this.tank >= fuel) {
+    this.odometer += distance;
+    this.tank -= fuel;
+  } else {
+    this.odometer += (this.milesPerGallon * this.tank);
+    this.tank = 0;
+    return "The car is out of gas with " + this.odometer + " miles.";
+  }
+}
+
+console.log(new Car("Ferrari 458", 13))
 /*
   TASK 3
     - Write a Baby constructor subclassing Person.
@@ -68,18 +106,27 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, toy) {
+  Person.call(this, name, age);
+  this.favoriteToy = toy;
 }
+
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function() {
+  return 'Playing with ' + this.favoriteToy;
+}
+
+console.log(new Baby("Alex ", 2, "Teddy Bear." ));
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. In global scope, the keyword "this" means the it's using the window.
+  2. During the function is being called preceding dot, whatever in front of or before the dot is "this".
+  3. While a function that's constructed, "this" means the specifice occasion of the created object.
+  4. "This" is defined when JS is called and applied.
 */
 
 
